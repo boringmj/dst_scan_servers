@@ -1,6 +1,15 @@
 import aiohttp,asyncio,re,time
 
 class Klei:
+    """
+    Klei服务器核心类
+
+    通过此类可以获取Klei联机服务器的大厅列表、大厅数据、世界列表、玩家信息等
+    @ahthor: boringmj(wuliaomj@qq.com)
+    请勿用于商业用途,仅供学习交流
+    作者不对使用此类产生的任何后果负责,请自行承担风险
+    同样作者不会对任何人做出任何承诺,包括但不限于提供技术支持
+    """
 
     token=""
     platform="Steam"
