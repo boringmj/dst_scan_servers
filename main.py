@@ -124,7 +124,7 @@ async def main():
     tasks=[]
     # 创建任务
     for item in lobby:
-        task=asyncio.create_task(klei.world(item,"403的世界"))
+        task=asyncio.create_task(klei.world(item))
         tasks.append(task)
     # 等待所有任务完成
     await asyncio.gather(*tasks)
@@ -133,12 +133,15 @@ async def main():
     for task in tasks:
         wodrld_data+=await task
     print(wodrld_data)
+    if not wodrld_data:
+        return
     # 取出第一个世界查询具体信息
     row_data=await klei.get_row_data(wodrld_data[0]['lobby'],wodrld_data[0]['__rowId'])
     print(row_data)
-    # 获取玩家信息
-    player_data=await klei.player(row_data[0])
-    print(player_data)
+    if row_data:
+        # 获取玩家信息
+        player_data=await klei.player(row_data[0])
+        print(player_data)
     print(f"耗时: {time.time()-start_time}s")
 
 asyncio.run(main())
