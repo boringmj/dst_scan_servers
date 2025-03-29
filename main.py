@@ -81,7 +81,7 @@ class Klei:
                     return data["GET"]
                 else:
                     return []
-        
+
     async def world(self,lobby:str,filter:str=''):
         """
         获取世界列表
@@ -130,22 +130,20 @@ async def main():
     klei=Klei()
     klei.set_token("这里填写你的token,可以通过申请Klei联机服务器获取")
     lobby=await klei.get_lobby()
-    tasks=[]
-    # 创建任务
-    for item in lobby:
-        task=asyncio.create_task(klei.world(item))
-        tasks.append(task)
-    # 等待所有任务完成
-    await asyncio.gather(*tasks)
-    # 获取任务结果
-    wodrld_data=[]
-    for task in tasks:
-        wodrld_data+=await task
-    print(wodrld_data)
-    if not wodrld_data:
+    # 通过建立多线程和异步协程的方式获取数据
+    result=[]
+    for lobby in lobby:
+        result.append(klei.world(lobby))
+    result=await asyncio.gather(*result)
+    # 将数据合并
+    world_data=[]
+    for task in result:
+        world_data+=task
+    # print(world_data)
+    if not world_data:
         return
     # 取出第一个世界查询具体信息
-    row_data=await klei.get_row_data(wodrld_data[0]['lobby'],wodrld_data[0]['__rowId'])
+    row_data=await klei.get_row_data(world_data[0]['lobby'],world_data[0]['__rowId'])
     print(row_data)
     if row_data:
         # 获取玩家信息
